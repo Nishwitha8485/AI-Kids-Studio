@@ -1,4 +1,57 @@
-function GenerateButton() {
+import { useState } from "react";
+import { generateStory } from "../services/api";
+
+function GenerateButton({
+  prompt,
+  generatedStory,
+  setGeneratedStory,
+}) {
+  const [loading, setLoading] = useState(false);
+
+  const handleGenerate = async () => {
+    if (!prompt.trim()) {
+      alert("Please enter a story prompt.");
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const response = await generateStory({
+        prompt: prompt,
+        animation_style: "Cartoon",
+        language: "English",
+        duration: "5 Minutes",
+        age_group: "5-7",
+        voice: "Child",
+        emotion: "Happy",
+      });
+
+      // Convert JSON object into text
+      setGeneratedStory(
+        JSON.stringify(response.story, null, 2)
+      );
+
+    } catch (error) {
+      console.error("FULL ERROR:", error);
+
+      if (error.response) {
+        alert(
+          `Backend Error ${error.response.status}\n\n` +
+          JSON.stringify(error.response.data, null, 2)
+        );
+      } else if (error.request) {
+        alert(
+          "Request reached the browser but no response came from FastAPI."
+        );
+      } else {
+        alert(error.message);
+      }
+    }
+
+    setLoading(false);
+  };
+
   return (
     <div
       style={{
@@ -28,14 +81,15 @@ function GenerateButton() {
           lineHeight: "28px",
         }}
       >
-        AI Kids Studio will automatically execute every AI Agent in sequence to
-        generate your complete educational video.
+        AI Kids Studio will automatically execute every AI Agent in sequence
+        to generate your complete educational video.
       </p>
 
       <div
         style={{
           display: "grid",
-          gridTemplateColumns: "repeat(auto-fit,minmax(180px,1fr))",
+          gridTemplateColumns:
+            "repeat(auto-fit,minmax(180px,1fr))",
           gap: "15px",
           marginBottom: "30px",
         }}
@@ -53,8 +107,12 @@ function GenerateButton() {
       </div>
 
       <button
+        onClick={handleGenerate}
+        disabled={loading}
         style={{
-          background: "linear-gradient(90deg,#2563eb,#7c3aed)",
+          background: loading
+            ? "#6b7280"
+            : "linear-gradient(90deg,#2563eb,#7c3aed)",
           color: "white",
           border: "none",
           padding: "18px 45px",
@@ -64,7 +122,9 @@ function GenerateButton() {
           fontWeight: "bold",
         }}
       >
-        ✨ Generate Complete AI Video
+        {loading
+          ? "⏳ Generating Story..."
+          : "✨ Generate Complete AI Video"}
       </button>
 
       <div
@@ -79,6 +139,40 @@ function GenerateButton() {
         <p>🤖 AI Agents : 12 Active</p>
         <p>🌍 Multi-language Supported</p>
       </div>
+
+      {generatedStory && (
+        <div
+          style={{
+            marginTop: "35px",
+            background: "#1f2937",
+            padding: "25px",
+            borderRadius: "12px",
+            border: "2px solid #22c55e",
+            textAlign: "left",
+          }}
+        >
+          <h2
+            style={{
+              color: "#22c55e",
+              marginBottom: "20px",
+            }}
+          >
+            📖 AI Generated Story
+          </h2>
+
+          <pre
+            style={{
+              whiteSpace: "pre-wrap",
+              color: "white",
+              lineHeight: "30px",
+              fontSize: "16px",
+              fontFamily: "inherit",
+            }}
+          >
+            {generatedStory}
+          </pre>
+        </div>
+      )}
     </div>
   );
 }

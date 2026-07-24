@@ -1,26 +1,33 @@
-function PromptSection() {
+import { FileText } from "lucide-react";
+
+function PromptSection({ prompt, setPrompt }) {
   return (
     <div
       style={{
-        background: "#1d2433",
-        padding: "25px",
-        borderRadius: "15px",
-        marginBottom: "25px",
-        boxShadow: "0 0 15px rgba(0,0,0,0.3)",
+        background: "#1f2937",
+        borderRadius: "18px",
+        padding: "30px",
+        marginBottom: "30px",
+        boxShadow: "0 10px 30px rgba(0,0,0,0.3)",
       }}
     >
       <h2
         style={{
           color: "white",
-          marginBottom: "15px",
+          marginBottom: "20px",
+          textAlign: "center",
         }}
       >
-        📝 Story Prompt
+        <FileText size={28} style={{ marginRight: "10px" }} />
+        Story Prompt
       </h2>
 
       <textarea
-        rows="8"
+        value={prompt}
+        onChange={(e) => setPrompt(e.target.value)}
+        rows={12}
         placeholder={`Example:
+
 Create a funny story about a brave rabbit who saves the forest using teamwork and kindness.
 
 Include:
@@ -31,16 +38,18 @@ Include:
 • Happy ending`}
         style={{
           width: "100%",
-          padding: "15px",
-          borderRadius: "10px",
+          padding: "18px",
           background: "#111827",
           color: "white",
-          border: "1px solid #333",
+          border: "1px solid #374151",
+          borderRadius: "12px",
           fontSize: "16px",
           resize: "vertical",
           outline: "none",
+          boxSizing: "border-box",
+          lineHeight: "1.7",
         }}
-      ></textarea>
+      />
     </div>
   );
 }

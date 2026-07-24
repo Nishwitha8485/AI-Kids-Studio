@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 import Navbar from "../components/Navbar";
 import PromptSection from "../components/PromptSection";
 import BasicSettings from "../components/BasicSettings";
@@ -11,20 +13,24 @@ import AIAgentPanel from "../components/AIAgentPanel";
 import GenerateButton from "../components/GenerateButton";
 
 function Dashboard() {
+  // ================= React State =================
+
+  const [prompt, setPrompt] = useState("");
+
+  const [generatedStory, setGeneratedStory] = useState("");
+
   return (
     <>
       <Navbar />
 
       <div
-        
-  style={{
-  width: "100%",
-  padding: "30px 50px",
-  color: "white",
-  boxSizing: "border-box",
-}}
->
-    
+        style={{
+          width: "100%",
+          padding: "30px 50px",
+          color: "white",
+          boxSizing: "border-box",
+        }}
+      >
         {/* ================= Header ================= */}
 
         <div
@@ -51,16 +57,20 @@ function Dashboard() {
               lineHeight: "30px",
             }}
           >
-            An Autonomous Multi-Agent AI Platform that transforms a simple story
-            idea into a complete educational video with AI-generated script,
-            storyboard, characters, animation, voice-over, subtitles,
-            background music, YouTube SEO optimization, and final MP4 export.
+            An Autonomous Multi-Agent AI Platform that transforms a simple
+            story idea into a complete educational video with AI-generated
+            script, storyboard, characters, animation, voice-over,
+            subtitles, background music, YouTube SEO optimization, and
+            final MP4 export.
           </p>
         </div>
 
         {/* ================= Prompt ================= */}
 
-        <PromptSection />
+        <PromptSection
+          prompt={prompt}
+          setPrompt={setPrompt}
+        />
 
         {/* ================= Basic Settings ================= */}
 
@@ -94,9 +104,48 @@ function Dashboard() {
 
         <AIAgentPanel />
 
-        {/* ================= Generate ================= */}
+        {/* ================= Generate Button ================= */}
 
-        <GenerateButton />
+        <GenerateButton
+          prompt={prompt}
+          generatedStory={generatedStory}
+          setGeneratedStory={setGeneratedStory}
+        />
+
+        {/* ================= Generated Story ================= */}
+
+        {generatedStory && (
+          <div
+            style={{
+              marginTop: "40px",
+              background: "#111827",
+              padding: "30px",
+              borderRadius: "16px",
+              border: "2px solid #22c55e",
+            }}
+          >
+            <h2
+              style={{
+                color: "#22c55e",
+                marginBottom: "20px",
+              }}
+            >
+              📖 Generated Story
+            </h2>
+
+            <pre
+              style={{
+                whiteSpace: "pre-wrap",
+                color: "#f3f4f6",
+                fontSize: "16px",
+                lineHeight: "30px",
+                fontFamily: "inherit",
+              }}
+            >
+              {generatedStory}
+            </pre>
+          </div>
+        )}
 
         {/* ================= Footer ================= */}
 
@@ -119,7 +168,7 @@ function Dashboard() {
           <h3>AI Kids Studio v1.0</h3>
 
           <p>
-            Built with React • FastAPI • AI Agents • bemyapp • Python • FFmpeg • Future
+            Built with React • FastAPI • AI Agents • Python • Future
             Ready for GPT, Gemini, Claude & Open Source Models
           </p>
 
